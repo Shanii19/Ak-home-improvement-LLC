@@ -25,12 +25,42 @@ const staggerContainer = {
 };
 
 const services = [
-  { title: "Interior & Exterior Painting", icon: Paintbrush, desc: "Professional painting services to refresh and protect your home." },
-  { title: "Vinyl Flooring & Baseboards", icon: Hammer, desc: "Flawless installation of modern flooring and trim." },
-  { title: "Bathroom Remodeling", icon: Droplets, desc: "Complete renovations to create your perfect oasis." },
-  { title: "Drywall & Mold Removal", icon: Shield, desc: "Expert repair, replacement, and safe mold remediation." },
-  { title: "Epoxy Garage Floors", icon: Zap, desc: "Durable, easy-to-clean coatings for your garage." },
-  { title: "General Home Improvement", icon: Wrench, desc: "From fence installation to TV mounting, we do it all." }
+  {
+    title: "Interior & Exterior Painting",
+    icon: Paintbrush,
+    desc: "Professional painting services to refresh and protect your home.",
+    image: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80"
+  },
+  {
+    title: "Vinyl Flooring & Baseboards",
+    icon: Hammer,
+    desc: "Flawless installation of modern flooring and trim.",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+  },
+  {
+    title: "Bathroom Remodeling",
+    icon: Droplets,
+    desc: "Complete renovations to create your perfect oasis.",
+    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80"
+  },
+  {
+    title: "Drywall & Mold Removal",
+    icon: Shield,
+    desc: "Expert repair, replacement, and safe mold remediation.",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80"
+  },
+  {
+    title: "Epoxy Garage Floors",
+    icon: Zap,
+    desc: "Durable, easy-to-clean coatings for your garage.",
+    image: "https://images.unsplash.com/photo-1558618047-f9c2b9d1c59e?w=800&q=80"
+  },
+  {
+    title: "General Home Improvement",
+    icon: Wrench,
+    desc: "From fence installation to TV mounting, we do it all.",
+    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80"
+  }
 ];
 
 const reviews = [
@@ -190,16 +220,27 @@ function Home() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {services.map((service, idx) => (
-              <motion.div key={idx} variants={fadeInUp}>
-                <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 group overflow-hidden bg-card border-border/50">
-                  <CardContent className="p-8">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary transition-all duration-300">
-                      <service.icon className="w-7 h-7 text-primary group-hover:text-white transition-colors" />
+              <motion.div key={idx} variants={fadeInUp} className="group cursor-default">
+                <div className="relative h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
+                  {/* Background Image */}
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  {/* Dark overlay — lightens on hover to reveal image more */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/95 via-secondary/60 to-secondary/20 group-hover:from-secondary/90 group-hover:via-secondary/40 group-hover:to-transparent transition-all duration-500" />
+                  {/* Orange accent bar on hover */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  {/* Content */}
+                  <div className="absolute inset-0 flex flex-col justify-end p-6">
+                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <service.icon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-secondary mb-3">{service.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{service.desc}</p>
-                  </CardContent>
-                </Card>
+                    <h3 className="text-xl font-extrabold text-white mb-2 drop-shadow">{service.title}</h3>
+                    <p className="text-white/80 text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-24 transition-all duration-500">{service.desc}</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
