@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm --filter @workspace/ak-homeimprovement run build",
+  "outputDirectory": "artifacts/ak-homeimprovement/dist/public",
+  "installCommand": "pnpm install",
+  "framework": null
+}
