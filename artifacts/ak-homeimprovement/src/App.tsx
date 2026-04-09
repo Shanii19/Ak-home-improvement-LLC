@@ -107,30 +107,6 @@ function Navbar() {
 
   return (
     <>
-      {/* Top Info Bar */}
-      <div className="bg-[#0f1c2e] text-slate-300 py-2 px-4 text-sm hidden md:block">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-orange-400" />
-              225 Matlage Way #1772, Sugar Land, TX 77487
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-orange-400" />
-              Mon–Sat: 7 AM – 8 PM
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <a href="https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
-              <SiFacebook className="w-4 h-4" /> Facebook
-            </a>
-            <a href="tel:+18325777053" className="flex items-center gap-1.5 text-orange-400 font-semibold hover:text-orange-300 transition-colors">
-              <Phone className="w-3.5 h-3.5" /> +1 832-577-7053
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white border-b border-slate-200"}`}>
         <div className="container mx-auto px-4 flex justify-between items-center h-16">
