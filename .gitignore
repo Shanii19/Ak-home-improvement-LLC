@@ -47,3 +47,6 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Sensitive config — copy config.example.ts → config.ts and fill in real details
+artifacts/ak-homeimprovement/src/config.ts

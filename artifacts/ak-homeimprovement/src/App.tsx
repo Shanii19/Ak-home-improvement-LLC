@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Phone, MapPin, Clock, Star, Menu, X, ChevronRight, CheckCircle2, Shield, Wrench, Paintbrush, Hammer, Zap, Droplets, Mail, Facebook } from "lucide-react";
 import { SiFacebook } from "react-icons/si";
+import config from "./config";
 
 const queryClient = new QueryClient();
 
@@ -107,7 +108,6 @@ function Navbar() {
 
   return (
     <>
-      {/* Main Navbar */}
       <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white border-b border-slate-200"}`}>
         <div className="container mx-auto px-4 flex justify-between items-center h-16">
           {/* Logo */}
@@ -131,20 +131,20 @@ function Navbar() {
             ))}
           </div>
 
-          {/* CTA - hidden on mobile */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="tel:+18325777053"
+              href={config.contact.phoneHref}
               className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md transition-all duration-200"
             >
               <Phone className="w-4 h-4" /> Call Now
             </a>
           </div>
 
-          {/* Mobile: call icon + menu toggle */}
+          {/* Mobile: compact call + hamburger */}
           <div className="flex lg:hidden items-center gap-2">
             <a
-              href="tel:+18325777053"
+              href={config.contact.phoneHref}
               className="flex items-center gap-1.5 bg-orange-500 text-white font-bold px-3 py-2 rounded-lg text-xs"
             >
               <Phone className="w-3.5 h-3.5" /> Call
@@ -172,8 +172,8 @@ function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a href="tel:+18325777053" className="mt-2 flex items-center justify-center gap-2 bg-orange-500 text-white font-bold px-5 py-3 rounded-lg text-sm">
-              <Phone className="w-4 h-4" /> Call +1 832-577-7053
+            <a href={config.contact.phoneHref} className="mt-2 flex items-center justify-center gap-2 bg-orange-500 text-white font-bold px-5 py-3 rounded-lg text-sm">
+              <Phone className="w-4 h-4" /> Call {config.contact.phone}
             </a>
           </div>
         )}
@@ -198,7 +198,6 @@ function Home() {
 
       {/* ── Hero ── */}
       <section className="relative h-[75vh] sm:h-[82vh] min-h-[500px] flex items-center overflow-hidden">
-        {/* Slideshow background images */}
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
             <img
@@ -209,13 +208,10 @@ function Home() {
               style={{ opacity: idx === currentSlide ? 1 : 0 }}
             />
           ))}
-          {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/30 z-10 pointer-events-none" />
         </div>
 
-        {/* Hero Content */}
         <div className="container relative z-20 mx-auto px-5 sm:px-8 flex flex-col items-start text-left text-white pointer-events-auto w-full max-w-4xl">
-          {/* Stars badge */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -225,22 +221,20 @@ function Home() {
             <div className="flex">
               {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current text-orange-400" />)}
             </div>
-            5.0 Stars · 59 Google Reviews
+            {config.reviews.rating} Stars · {config.reviews.count} Google Reviews
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-4 sm:mb-6 leading-[1.05]"
           >
-            Sugar Land's<br />
+            {config.business.location}'s<br />
             <span className="text-orange-400">Trusted Home</span><br />
             Improvement Pros
           </motion.h1>
 
-          {/* Sub-text */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -251,7 +245,7 @@ function Home() {
           </motion.p>
         </div>
 
-        {/* Slide dots + label + arrows — pinned to bottom */}
+        {/* Slide controls */}
         <div className="absolute bottom-5 sm:bottom-8 left-0 right-0 z-20 flex flex-col items-center gap-2 sm:gap-3">
           <p className="hidden sm:block text-white/60 text-xs font-medium tracking-widest uppercase">
             {heroSlides[currentSlide].label}
@@ -308,7 +302,7 @@ function Home() {
       <div className="bg-[#0f1c2e] py-6 sm:py-8">
         <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
           <a
-            href="tel:+18325777053"
+            href={config.contact.phoneHref}
             className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
           >
             <Phone className="w-5 h-5" /> Get a Free Estimate
@@ -327,9 +321,9 @@ function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             {[
-              { value: "5.0", label: "Google Star Rating", sub: "Perfect Score" },
-              { value: "59+", label: "Verified Reviews", sub: "All 5 Stars" },
-              { value: "6+", label: "Years Serving", sub: "Sugar Land, TX" },
+              { value: config.reviews.rating, label: "Google Star Rating", sub: "Perfect Score" },
+              { value: `${config.reviews.count}+`, label: "Verified Reviews", sub: "All 5 Stars" },
+              { value: "6+", label: "Years Serving", sub: config.business.location },
               { value: "100%", label: "Client Satisfaction", sub: "Guaranteed" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center py-2">
@@ -449,7 +443,8 @@ function Home() {
               <span className="inline-block text-orange-400 font-bold text-sm uppercase tracking-widest mb-3">Why Choose Us</span>
               <h2 className="text-3xl sm:text-4xl font-black mb-5 sm:mb-6 leading-tight">The AK Home Improvement Difference</h2>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 sm:mb-10">
-                When you hire us, you get a dedicated team that treats your home with the utmost respect. No cut corners, no hidden fees — just outstanding craftsmanship backed by 59 five-star reviews.
+                When you hire us, you get a dedicated team that treats your home with the utmost respect. No cut corners,
+                no hidden fees — just outstanding craftsmanship backed by {config.reviews.count} five-star reviews.
               </p>
               <div className="space-y-4 sm:space-y-5">
                 {[
@@ -477,7 +472,7 @@ function Home() {
             >
               <div className="absolute -top-4 -right-2 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 bg-orange-500 rounded-2xl flex items-center justify-center shadow-xl rotate-6 z-10">
                 <div className="text-white text-center leading-tight">
-                  <div className="text-xl sm:text-2xl font-black">5.0</div>
+                  <div className="text-xl sm:text-2xl font-black">{config.reviews.rating}</div>
                   <div className="text-xs font-semibold">Stars</div>
                 </div>
               </div>
@@ -486,13 +481,13 @@ function Home() {
                 <p className="text-slate-500 text-sm mb-6 sm:mb-8">Contact us today for a free consultation. Same-day appointments may be available!</p>
 
                 <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                  <a href="tel:+18325777053" className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-200 transition-all group">
+                  <a href={config.contact.phoneHref} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-200 transition-all group">
                     <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-all">
                       <Phone className="w-4 h-4" />
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 font-medium">Phone</p>
-                      <p className="font-bold text-slate-900 text-sm">+1 832-577-7053</p>
+                      <p className="font-bold text-slate-900 text-sm">{config.contact.phone}</p>
                     </div>
                   </a>
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
@@ -501,7 +496,7 @@ function Home() {
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 font-medium">Address</p>
-                      <p className="font-bold text-slate-900 text-sm">225 Matlage Way #1772, Sugar Land, TX</p>
+                      <p className="font-bold text-slate-900 text-sm">{config.contact.addressShort}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
@@ -510,13 +505,13 @@ function Home() {
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 font-medium">Hours</p>
-                      <p className="font-bold text-slate-900 text-sm">Mon–Sat: 7 AM – 8 PM · Sun: Closed</p>
+                      <p className="font-bold text-slate-900 text-sm">{config.contact.hours} · Sun: Closed</p>
                     </div>
                   </div>
                 </div>
 
                 <a
-                  href="tel:+18325777053"
+                  href={config.contact.phoneHref}
                   className="flex items-center justify-center gap-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg transition-all duration-200"
                 >
                   <Phone className="w-4 h-4" /> Call Now for a Free Quote
@@ -549,30 +544,30 @@ function Home() {
               {
                 icon: Phone,
                 title: "Call or Text",
-                value: "+1 832-577-7053",
-                sub: "Mon–Sat, 7 AM – 8 PM",
-                href: "tel:+18325777053"
+                value: config.contact.phone,
+                sub: config.contact.hoursSub,
+                href: config.contact.phoneHref
               },
               {
                 icon: Mail,
                 title: "Email Us",
-                value: "armanhomeimprovement",
-                sub: "@gmail.com",
-                href: "mailto:armanhomeimprovement@gmail.com"
+                value: config.contact.email.split("@")[0],
+                sub: `@${config.contact.email.split("@")[1]}`,
+                href: config.contact.emailHref
               },
               {
                 icon: MapPin,
                 title: "Our Location",
-                value: "Sugar Land, TX",
-                sub: "225 Matlage Way #1772",
-                href: "https://maps.google.com/?q=225+Matlage+Way+%231772+Sugar+Land+TX+77487"
+                value: config.business.location,
+                sub: config.contact.addressShort.split(",")[0],
+                href: config.contact.mapsHref
               },
               {
                 icon: Facebook,
                 title: "Facebook",
-                value: "AK Home Improvement",
+                value: config.social.facebookLabel,
                 sub: "Message us on Facebook",
-                href: "https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/"
+                href: config.social.facebookUrl
               }
             ].map((item, idx) => (
               <motion.div key={idx} variants={fadeInUp}>
@@ -601,10 +596,10 @@ function Home() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3">Let's build something great together.</h2>
           <p className="text-orange-100 mb-6 sm:mb-8 text-sm sm:text-base">Licensed, insured, and ready to transform your home.</p>
           <a
-            href="tel:+18325777053"
+            href={config.contact.phoneHref}
             className="inline-flex items-center gap-2 bg-white text-orange-600 hover:text-orange-700 font-black px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
           >
-            <Phone className="w-5 h-5" /> Call +1 832-577-7053
+            <Phone className="w-5 h-5" /> Call {config.contact.phone}
           </a>
         </div>
       </section>
@@ -621,10 +616,11 @@ function Home() {
                 </span>
               </div>
               <p className="text-sm leading-relaxed max-w-sm mb-5">
-                Professional, reliable, and high-quality home improvement services in Sugar Land, Texas. Rated 5.0 stars with 59 verified reviews.
+                Professional, reliable, and high-quality home improvement services in {config.business.location}.
+                Rated {config.reviews.rating} stars with {config.reviews.count}+ verified reviews.
               </p>
               <a
-                href="https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/"
+                href={config.social.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-slate-800 hover:bg-orange-500 text-slate-300 hover:text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
@@ -648,28 +644,28 @@ function Home() {
               <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-widest">Contact</h4>
               <ul className="space-y-2.5 text-sm">
                 <li>
-                  <a href="tel:+18325777053" className="hover:text-orange-400 transition-colors flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-orange-400 shrink-0" /> +1 832-577-7053
+                  <a href={config.contact.phoneHref} className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-orange-400 shrink-0" /> {config.contact.phone}
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:armanhomeimprovement@gmail.com" className="hover:text-orange-400 transition-colors flex items-start gap-2 break-all">
-                    <Mail className="w-3.5 h-3.5 text-orange-400 shrink-0 mt-0.5" /> armanhomeimprovement@gmail.com
+                  <a href={config.contact.emailHref} className="hover:text-orange-400 transition-colors flex items-start gap-2 break-all">
+                    <Mail className="w-3.5 h-3.5 text-orange-400 shrink-0 mt-0.5" /> {config.contact.email}
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-orange-400 mt-0.5 shrink-0" /> 225 Matlage Way #1772, Sugar Land, TX 77487
+                  <MapPin className="w-3.5 h-3.5 text-orange-400 mt-0.5 shrink-0" /> {config.contact.address}
                 </li>
                 <li className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-orange-400 shrink-0" /> Mon–Sat: 7 AM – 8 PM
+                  <Clock className="w-3.5 h-3.5 text-orange-400 shrink-0" /> {config.contact.hours}
                 </li>
               </ul>
             </div>
           </div>
 
           <div className="pt-6 sm:pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-center">
-            <p>&copy; {new Date().getFullYear()} AK Home Improvement LLC. All rights reserved.</p>
-            <p>Sugar Land, Texas</p>
+            <p>&copy; {new Date().getFullYear()} {config.business.name}. All rights reserved.</p>
+            <p>{config.business.location}</p>
           </div>
         </div>
       </footer>

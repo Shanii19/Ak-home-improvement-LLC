@@ -103,13 +103,15 @@ npx vite build --config vite.config.ts
 
 ## 📞 Business Contact
 
-| | |
-|---|---|
-| 📞 **Phone** | [+1 832-577-7053](tel:+18325777053) |
-| 📧 **Email** | [armanhomeimprovement@gmail.com](mailto:armanhomeimprovement@gmail.com) |
-| 📍 **Address** | 225 Matlage Way #1772, Sugar Land, TX 77487 |
-| 🕐 **Hours** | Mon–Sat: 7 AM – 8 PM |
-| 👍 **Facebook** | [AK Home Improvement LLC](https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/) |
+Contact details are stored in `src/config.ts` (gitignored).  
+Copy the example file and fill in your own details:
+
+```bash
+cp artifacts/ak-homeimprovement/src/config.example.ts \
+   artifacts/ak-homeimprovement/src/config.ts
+```
+
+Then edit `config.ts` with your real phone, email, address, Facebook URL, and review counts.
 
 ---
 
