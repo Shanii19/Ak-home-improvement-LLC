@@ -48,5 +48,9 @@ Thumbs.db
 .cache/
 .local/
 
-# Sensitive config — copy config.example.ts → config.ts and fill in real details
+# Sensitive config — use environment variables instead
+# For local dev: copy .env.example → .env.local and fill in real values
+# For Vercel: set VITE_* vars in Vercel Dashboard → Settings → Environment Variables
 artifacts/ak-homeimprovement/src/config.ts
+artifacts/ak-homeimprovement/.env.local
+artifacts/ak-homeimprovement/.env
