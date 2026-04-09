@@ -541,7 +541,7 @@ function Home() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto"
           >
             {[
               {
@@ -550,6 +550,13 @@ function Home() {
                 value: "+1 832-577-7053",
                 sub: "Available Mon–Sat, 7 AM – 8 PM",
                 href: "tel:+18325777053"
+              },
+              {
+                icon: Mail,
+                title: "Email Us",
+                value: "armanhomeimprovement",
+                sub: "@gmail.com",
+                href: "mailto:armanhomeimprovement@gmail.com"
               },
               {
                 icon: MapPin,
@@ -643,6 +650,11 @@ function Home() {
                 <li>
                   <a href="tel:+18325777053" className="hover:text-orange-400 transition-colors flex items-center gap-2">
                     <Phone className="w-3.5 h-3.5 text-orange-400" /> +1 832-577-7053
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:armanhomeimprovement@gmail.com" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-orange-400" /> armanhomeimprovement@gmail.com
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
