@@ -4,419 +4,590 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Phone, MapPin, Clock, Star, Facebook, ChevronRight, CheckCircle2, Shield, Wrench, Paintbrush, Hammer, Zap, Droplets } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Phone, MapPin, Clock, Star, Menu, X, ChevronRight, CheckCircle2, Shield, Wrench, Paintbrush, Hammer, Zap, Droplets, Mail, Facebook } from "lucide-react";
 import { SiFacebook } from "react-icons/si";
 
 const queryClient = new QueryClient();
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
 };
 
 const services = [
   {
     title: "Interior & Exterior Painting",
     icon: Paintbrush,
-    desc: "Professional painting services to refresh and protect your home.",
+    desc: "Professional painting services to refresh and protect your home inside and out.",
     image: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80"
   },
   {
     title: "Vinyl Flooring & Baseboards",
     icon: Hammer,
-    desc: "Flawless installation of modern flooring and trim.",
+    desc: "Flawless installation of modern flooring and trim for a polished finish.",
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
   },
   {
     title: "Bathroom Remodeling",
     icon: Droplets,
-    desc: "Complete renovations to create your perfect oasis.",
+    desc: "Complete renovations tailored to transform your bathroom into a personal oasis.",
     image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80"
   },
   {
     title: "Drywall & Mold Removal",
     icon: Shield,
-    desc: "Expert repair, replacement, and safe mold remediation.",
+    desc: "Expert drywall repair, replacement, and safe certified mold remediation.",
     image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80"
   },
   {
     title: "Epoxy Garage Floors",
     icon: Zap,
-    desc: "Durable, easy-to-clean coatings for your garage.",
+    desc: "Durable, seamless epoxy coatings that are easy to clean and built to last.",
     image: "https://images.unsplash.com/photo-1558618047-f9c2b9d1c59e?w=800&q=80"
   },
   {
     title: "General Home Improvement",
     icon: Wrench,
-    desc: "From fence installation to TV mounting, we do it all.",
+    desc: "Fence installation, TV mounting, blinds, storm damage repair, and much more.",
     image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80"
   }
 ];
 
 const reviews = [
-  { text: "Right price, hard workers, nice people.", author: "Google Reviewer" },
-  { text: "Their attention to detail and quality of work were exceptional.", author: "Zulfiya H." },
-  { text: "Arman and his team were the best. I wanted a bunch of work done including replacing the flooring before I moved into my new house... Trust the 5 star reviews!", author: "Jihoon Kim" },
-  { text: "Ron was very responsive. Was able to book an appointment same day. Very courteous and respectful. Punctual and neat work. Clean and quick service.", author: "Patricia Neils" },
-  { text: "Ron and his professional guys were outstanding. I was very impressed with how my interior painting project turned out.", author: "Beverly Johnson" },
-  { text: "It's not good, it's supper great company. If you are looking for good service great price. This is it!!", author: "Bilal Jalal" }
+  { text: "Right price, hard workers, nice people. Highly recommend for any home project.", author: "Google Reviewer", initials: "GR" },
+  { text: "Their attention to detail and quality of work were exceptional. Could not be more satisfied.", author: "Zulfiya H.", initials: "ZH" },
+  { text: "Arman and his team were the best. They completed an entire flooring job in basically one day. Trust the 5 star reviews!", author: "Jihoon Kim", initials: "JK" },
+  { text: "Ron was very responsive — booked an appointment same day. Punctual, neat, clean and quick service.", author: "Patricia Neils", initials: "PN" },
+  { text: "Ron and his professional guys were outstanding. My interior painting project turned out beautifully.", author: "Beverly Johnson", initials: "BJ" },
+  { text: "Super great company. Ron was super friendly and his team was very polite. Great price and service.", author: "Bilal Jalal", initials: "BJ" }
 ];
 
-function Home() {
+const navLinks = [
+  { label: "Home", href: "#home" },
+  { label: "Services", href: "#services" },
+  { label: "Reviews", href: "#reviews" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" }
+];
+
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen font-sans bg-background text-foreground overflow-x-hidden">
-      
-      {/* Top Bar */}
-      <div className="bg-secondary text-secondary-foreground py-2 px-4 text-sm hidden md:flex justify-between items-center z-50 relative">
-        <div className="flex items-center gap-6 container mx-auto">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
-            <span>225 Matlage Way #1772, Sugar Land, TX 77487</span>
+    <>
+      {/* Top Info Bar */}
+      <div className="bg-[#0f1c2e] text-slate-300 py-2 px-4 text-sm hidden md:block">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-orange-400" />
+              225 Matlage Way #1772, Sugar Land, TX 77487
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-orange-400" />
+              Mon–Sat: 7 AM – 8 PM
+            </span>
           </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-primary" />
-            <span>Mon–Sat 7 AM–8 PM</span>
-          </div>
-          <div className="ml-auto flex items-center gap-4">
-            <a href="https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-              <SiFacebook className="w-5 h-5" />
+          <div className="flex items-center gap-4">
+            <a href="https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
+              <SiFacebook className="w-4 h-4" /> Facebook
             </a>
-            <div className="flex items-center gap-2 font-bold text-primary">
-              <Phone className="w-4 h-4" />
-              <span>+1 832-577-7053</span>
-            </div>
+            <a href="tel:+18325777053" className="flex items-center gap-1.5 text-orange-400 font-semibold hover:text-orange-300 transition-colors">
+              <Phone className="w-3.5 h-3.5" /> +1 832-577-7053
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Navbar */}
-      <nav className="sticky top-0 w-full bg-background/95 backdrop-blur-md border-b border-border z-40 py-4 px-4 shadow-sm">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="text-2xl font-extrabold tracking-tight text-secondary">
-            AK <span className="text-primary">Home Improvement</span>
-          </div>
-          <div className="hidden lg:flex items-center gap-8 font-medium">
-            <a href="#services" className="hover:text-primary transition-colors">Services</a>
-            <a href="#reviews" className="hover:text-primary transition-colors">Reviews</a>
-            <a href="#about" className="hover:text-primary transition-colors">About</a>
-          </div>
-          <Button className="font-bold text-base bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all" size="lg" asChild>
-            <a href="tel:+18325777053">
-              <Phone className="w-4 h-4 mr-2" />
-              Call Now
-            </a>
-          </Button>
-        </div>
-      </nav>
+      {/* Main Navbar */}
+      <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white border-b border-slate-200"}`}>
+        <div className="container mx-auto px-4 flex justify-between items-center h-16">
+          {/* Logo */}
+          <a href="#home" className="flex items-center gap-2.5 shrink-0">
+            <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center shadow">
+              <Wrench className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-black tracking-tight text-slate-900">
+              AK <span className="text-orange-500">Home Improvement</span>
+            </span>
+          </a>
 
-      {/* Hero Section */}
-      <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+          {/* Desktop Nav Links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-all duration-200"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="hidden lg:flex items-center gap-3">
+            <a
+              href="tel:+18325777053"
+              className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <Phone className="w-4 h-4" /> Call Now
+            </a>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button className="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileOpen && (
+          <div className="lg:hidden bg-white border-t border-slate-100 px-4 py-4 flex flex-col gap-1 shadow-lg">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="px-4 py-3 text-sm font-semibold text-slate-700 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-all"
+              >
+                {link.label}
+              </a>
+            ))}
+            <a href="tel:+18325777053" className="mt-2 flex items-center justify-center gap-2 bg-orange-500 text-white font-bold px-5 py-3 rounded-lg text-sm">
+              <Phone className="w-4 h-4" /> Call +1 832-577-7053
+            </a>
+          </div>
+        )}
+      </nav>
+    </>
+  );
+}
+
+function Home() {
+  return (
+    <div id="home" className="flex flex-col min-h-screen font-sans bg-white text-slate-900 overflow-x-hidden">
+      <Navbar />
+
+      {/* ── Hero ── */}
+      <section className="relative h-[88vh] min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-secondary/80 mix-blend-multiply z-10" />
-          <img 
-            src="/hero-bg.jpg" 
-            alt="Professional Home Renovation" 
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/40 z-10" />
+          <img
+            src="/hero-bg.jpg"
+            alt="Professional Home Renovation"
             className="w-full h-full object-cover object-center"
           />
         </div>
-        
-        <div className="container relative z-20 mx-auto px-4 flex flex-col items-center text-center text-white">
+
+        <div className="container relative z-20 mx-auto px-4 flex flex-col items-start text-left text-white max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2 bg-primary/20 backdrop-blur-md border border-primary/50 text-white px-4 py-2 rounded-full mb-8"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/40 text-orange-300 px-4 py-1.5 rounded-full mb-6 text-sm font-semibold"
           >
-            <div className="flex text-primary">
-              {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+            <div className="flex">
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current text-orange-400" />)}
             </div>
-            <span className="font-semibold text-sm">5.0 Stars (59 Google Reviews)</span>
+            5.0 Stars · 59 Google Reviews
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl leading-tight"
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.05]"
           >
-            Top-Rated Home Improvement in <span className="text-primary">Sugar Land</span>.
+            Sugar Land's<br />
+            <span className="text-orange-400">Trusted Home</span><br />
+            Improvement Pros
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl font-light"
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="text-lg md:text-xl text-slate-200 mb-10 max-w-xl leading-relaxed"
           >
-            We show up on time, do exceptional work, and leave your place spotless. Your trusted local experts for all renovations and repairs.
+            Painting, flooring, remodeling, drywall, epoxy floors, and more. We show up on time, do exceptional work, and leave your home spotless.
           </motion.p>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+            transition={{ duration: 0.7, delay: 0.45 }}
+            className="flex flex-col sm:flex-row gap-4"
           >
-            <Button size="lg" className="h-14 px-8 text-lg font-bold bg-primary hover:bg-primary/90 text-white shadow-xl hover:-translate-y-1 transition-all" asChild>
-              <a href="tel:+18325777053">Get a Free Estimate</a>
-            </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-md shadow-xl hover:-translate-y-1 transition-all" asChild>
-              <a href="#services">Our Services</a>
-            </Button>
+            <a
+              href="tel:+18325777053"
+              className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-xl text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <Phone className="w-5 h-5" /> Get a Free Estimate
+            </a>
+            <a
+              href="#services"
+              className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 py-4 rounded-xl text-base hover:-translate-y-0.5 transition-all duration-200"
+            >
+              View Our Services <ChevronRight className="w-4 h-4" />
+            </a>
           </motion.div>
         </div>
       </section>
 
-      {/* Trust Banner */}
-      <section className="bg-primary text-primary-foreground py-8">
+      {/* ── Stats Bar ── */}
+      <section className="bg-[#0f1c2e] text-white py-10">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-primary-foreground/20">
-            <div className="flex flex-col items-center pt-4 md:pt-0">
-              <span className="text-4xl font-extrabold mb-2">5.0</span>
-              <div className="flex text-white mb-2">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { value: "5.0", label: "Google Star Rating", sub: "Perfect Score" },
+              { value: "59+", label: "Verified Reviews", sub: "All 5 Stars" },
+              { value: "6+", label: "Years Serving", sub: "Sugar Land, TX" },
+              { value: "100%", label: "Client Satisfaction", sub: "Guaranteed" }
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center py-2">
+                <span className="text-4xl font-black text-orange-400 mb-1">{stat.value}</span>
+                <span className="font-semibold text-white text-sm">{stat.label}</span>
+                <span className="text-slate-400 text-xs mt-0.5">{stat.sub}</span>
               </div>
-              <span className="text-primary-foreground/90 font-medium">59 Verified Google Reviews</span>
-            </div>
-            <div className="flex flex-col items-center pt-4 md:pt-0">
-              <CheckCircle2 className="w-10 h-10 mb-3" />
-              <span className="text-xl font-bold mb-1">Licensed & Insured</span>
-              <span className="text-primary-foreground/90 font-medium">Professional & Reliable</span>
-            </div>
-            <div className="flex flex-col items-center pt-4 md:pt-0">
-              <MapPin className="w-10 h-10 mb-3" />
-              <span className="text-xl font-bold mb-1">Local Experts</span>
-              <span className="text-primary-foreground/90 font-medium">Proudly serving Sugar Land, TX</span>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-24 bg-muted/30">
+      {/* ── Services ── */}
+      <section id="services" className="py-24 bg-slate-50">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="text-center mb-16"
+            className="text-center mb-14"
           >
-            <h2 className="text-4xl font-extrabold text-secondary mb-4">Our Services</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From minor repairs to complete remodels, our skilled team delivers high-quality craftsmanship for every corner of your home.
+            <span className="inline-block text-orange-500 font-bold text-sm uppercase tracking-widest mb-3">What We Do</span>
+            <h2 className="text-4xl font-black text-slate-900 mb-4">Our Services</h2>
+            <p className="text-slate-500 max-w-xl mx-auto text-base leading-relaxed">
+              From minor repairs to complete remodels — skilled craftsmanship for every corner of your home.
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {services.map((service, idx) => (
               <motion.div key={idx} variants={fadeInUp} className="group cursor-default">
-                <div className="relative h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-                  {/* Background Image */}
+                <div className="relative h-64 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500">
                   <img
                     src={service.image}
                     alt={service.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* Dark overlay — lightens on hover to reveal image more */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/95 via-secondary/60 to-secondary/20 group-hover:from-secondary/90 group-hover:via-secondary/40 group-hover:to-transparent transition-all duration-500" />
-                  {/* Orange accent bar on hover */}
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  {/* Content */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <service.icon className="w-6 h-6 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/10 group-hover:from-slate-900/85 group-hover:via-slate-900/35 transition-all duration-500" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-5">
+                    <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center mb-3 shadow group-hover:scale-110 transition-transform duration-300">
+                      <service.icon className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-xl font-extrabold text-white mb-2 drop-shadow">{service.title}</h3>
-                    <p className="text-white/80 text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-24 transition-all duration-500">{service.desc}</p>
+                    <h3 className="text-lg font-bold text-white mb-1">{service.title}</h3>
+                    <p className="text-slate-300 text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-500">{service.desc}</p>
                   </div>
                 </div>
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="mt-16 text-center"
+            className="mt-12 text-center"
           >
-            <p className="text-lg text-muted-foreground mb-6 font-medium">
-              Also offering: Blind Installation, Scaffolding Rental, Game Room Finishing & Storm Damage Repair.
+            <p className="text-slate-500 mb-6 text-sm">
+              Also available: Blind Installation · Scaffolding Rental · Game Room Finishing · Storm Damage Repair
             </p>
-            <Button size="lg" variant="outline" className="font-bold border-2 hover:bg-secondary hover:text-white" asChild>
-              <a href="tel:+18325777053">Discuss Your Project</a>
-            </Button>
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 border-2 border-slate-800 text-slate-800 hover:bg-slate-800 hover:text-white font-bold px-7 py-3 rounded-xl transition-all duration-200"
+            >
+              Discuss Your Project <ChevronRight className="w-4 h-4" />
+            </a>
           </motion.div>
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <section id="reviews" className="py-24 bg-background">
+      {/* ── Reviews ── */}
+      <section id="reviews" className="py-24 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="text-center mb-16"
+            className="text-center mb-14"
           >
-            <h2 className="text-4xl font-extrabold text-secondary mb-4">Don't Just Take Our Word For It</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We've built our reputation on hard work, honesty, and incredible results. See what your neighbors have to say.
+            <span className="inline-block text-orange-500 font-bold text-sm uppercase tracking-widest mb-3">Testimonials</span>
+            <h2 className="text-4xl font-black text-slate-900 mb-4">What Our Clients Say</h2>
+            <p className="text-slate-500 max-w-xl mx-auto text-base">
+              We've built our reputation on hard work and exceptional results. See what your neighbors have to say.
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {reviews.map((review, idx) => (
               <motion.div key={idx} variants={fadeInUp} className="h-full">
-                <Card className="h-full bg-muted/40 border-none shadow-md hover:shadow-lg transition-shadow">
-                  <CardContent className="p-8 flex flex-col h-full">
-                    <div className="flex text-primary mb-4">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                <div className="h-full bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-orange-200 transition-all duration-300 flex flex-col">
+                  <div className="flex text-orange-400 mb-4">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                  </div>
+                  <p className="text-slate-700 leading-relaxed flex-grow text-sm">"{review.text}"</p>
+                  <div className="mt-5 flex items-center gap-3 pt-4 border-t border-slate-200">
+                    <div className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                      {review.initials}
                     </div>
-                    <p className="text-secondary/80 italic flex-grow text-lg">"{review.text}"</p>
-                    <div className="mt-6 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold">
-                        {review.author.charAt(0)}
-                      </div>
-                      <span className="font-bold text-secondary">{review.author}</span>
+                    <div>
+                      <p className="font-bold text-slate-900 text-sm">{review.author}</p>
+                      <p className="text-xs text-slate-400">Verified Google Review</p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Process / Why Us Section */}
-      <section id="about" className="py-24 bg-secondary text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none" />
-        
-        <div className="container mx-auto px-4 relative z-10">
+      {/* ── About / Why Us ── */}
+      <section id="about" className="py-24 bg-[#0f1c2e] text-white">
+        <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-              <h2 className="text-4xl font-extrabold mb-6 leading-tight">The AK Home Improvement Difference</h2>
-              <p className="text-xl text-white/80 mb-8 font-light">
-                When you hire us, you're getting a dedicated team that treats your home with the utmost respect. No cut corners, no hidden fees, just outstanding craftsmanship.
+              <span className="inline-block text-orange-400 font-bold text-sm uppercase tracking-widest mb-3">Why Choose Us</span>
+              <h2 className="text-4xl font-black mb-6 leading-tight">The AK Home Improvement Difference</h2>
+              <p className="text-slate-300 text-base leading-relaxed mb-10">
+                When you hire us, you get a dedicated team that treats your home with the utmost respect. No cut corners, no hidden fees — just outstanding craftsmanship backed by 59 five-star reviews.
               </p>
-              
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {[
-                  { title: "Punctual & Professional", desc: "We show up when we say we will, and we clean up when we're done." },
-                  { title: "Transparent Pricing", desc: "Right price, clear estimates, and absolutely no surprise charges." },
-                  { title: "Exceptional Detail", desc: "From baseboards to full remodels, our attention to detail is unmatched." }
+                  { title: "Punctual & Professional", desc: "We show up when we say we will, and clean up when we're done." },
+                  { title: "Transparent Pricing", desc: "Fair quotes, clear estimates, and absolutely no surprise charges." },
+                  { title: "Exceptional Attention to Detail", desc: "From baseboards to full remodels, quality is never compromised." },
+                  { title: "Same-Day Availability", desc: "Flexible scheduling — we work around your timeline." }
                 ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-6 h-6" />
+                  <div key={idx} className="flex gap-4 items-start">
+                    <div className="w-8 h-8 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <CheckCircle2 className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xl font-bold mb-1">{item.title}</h4>
-                      <p className="text-white/70">{item.desc}</p>
+                      <h4 className="font-bold text-white mb-0.5">{item.title}</h4>
+                      <p className="text-slate-400 text-sm">{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-              className="bg-white text-secondary p-8 md:p-12 rounded-3xl shadow-2xl relative"
+              className="relative"
             >
-              <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary rounded-full flex items-center justify-center shadow-xl rotate-12">
-                <span className="text-white font-black text-center leading-tight">5.0<br/>Stars</span>
-              </div>
-              <h3 className="text-3xl font-extrabold mb-6">Ready to upgrade your home?</h3>
-              <p className="text-lg text-muted-foreground mb-8">
-                Contact us today for a free consultation. Same-day appointments may be available!
-              </p>
-              
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-4 text-lg font-bold">
-                  <Phone className="text-primary w-6 h-6" />
-                  <a href="tel:+18325777053" className="hover:text-primary transition-colors">+1 832-577-7053</a>
-                </div>
-                <div className="flex items-center gap-4 text-lg">
-                  <MapPin className="text-primary w-6 h-6" />
-                  <span>225 Matlage Way #1772<br/>Sugar Land, TX 77487</span>
-                </div>
-                <div className="flex items-center gap-4 text-lg">
-                  <Clock className="text-primary w-6 h-6" />
-                  <span>Mon–Sat: 7 AM – 8 PM<br/>Sun: Closed</span>
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-orange-500 rounded-2xl flex items-center justify-center shadow-xl rotate-6 z-10">
+                <div className="text-white text-center leading-tight">
+                  <div className="text-2xl font-black">5.0</div>
+                  <div className="text-xs font-semibold">Stars</div>
                 </div>
               </div>
-              
-              <Button size="lg" className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-white shadow-lg" asChild>
-                <a href="tel:+18325777053">Call Now for a Quote</a>
-              </Button>
+              <div className="bg-white text-slate-900 p-8 md:p-10 rounded-2xl shadow-2xl">
+                <h3 className="text-2xl font-black mb-2 text-slate-900">Ready to upgrade your home?</h3>
+                <p className="text-slate-500 text-sm mb-8">Contact us today for a free consultation. Same-day appointments may be available!</p>
+
+                <div className="space-y-4 mb-8">
+                  <a href="tel:+18325777053" className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-200 transition-all group">
+                    <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                      <Phone className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-medium">Phone</p>
+                      <p className="font-bold text-slate-900 text-sm">+1 832-577-7053</p>
+                    </div>
+                  </a>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shrink-0">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-medium">Address</p>
+                      <p className="font-bold text-slate-900 text-sm">225 Matlage Way #1772, Sugar Land, TX</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-medium">Hours</p>
+                      <p className="font-bold text-slate-900 text-sm">Mon–Sat: 7 AM – 8 PM · Sun: Closed</p>
+                    </div>
+                  </div>
+                </div>
+
+                <a
+                  href="tel:+18325777053"
+                  className="flex items-center justify-center gap-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg transition-all duration-200"
+                >
+                  <Phone className="w-4 h-4" /> Call Now for a Free Quote
+                </a>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* CTA Strip */}
-      <section className="py-16 bg-primary">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">Let's build something great together.</h2>
-          <Button size="lg" variant="secondary" className="h-14 px-10 text-lg font-bold text-primary bg-white hover:bg-white/90 shadow-xl hover:-translate-y-1 transition-all" asChild>
-            <a href="tel:+18325777053">
-              <Phone className="w-5 h-5 mr-2" />
-              Call +1 832-577-7053
-            </a>
-          </Button>
+      {/* ── Contact ── */}
+      <section id="contact" className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="text-center mb-14"
+          >
+            <span className="inline-block text-orange-500 font-bold text-sm uppercase tracking-widest mb-3">Get In Touch</span>
+            <h2 className="text-4xl font-black text-slate-900 mb-4">Contact Us</h2>
+            <p className="text-slate-500 max-w-lg mx-auto text-base">
+              Have a project in mind? Call us or reach out via Facebook — we respond fast and same-day quotes are often available.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+          >
+            {[
+              {
+                icon: Phone,
+                title: "Call or Text",
+                value: "+1 832-577-7053",
+                sub: "Available Mon–Sat, 7 AM – 8 PM",
+                href: "tel:+18325777053"
+              },
+              {
+                icon: MapPin,
+                title: "Our Location",
+                value: "Sugar Land, TX 77487",
+                sub: "225 Matlage Way #1772",
+                href: "https://maps.google.com/?q=225+Matlage+Way+%231772+Sugar+Land+TX+77487"
+              },
+              {
+                icon: Facebook,
+                title: "Facebook",
+                value: "AK Home Improvement",
+                sub: "Message us on Facebook",
+                href: "https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/"
+              }
+            ].map((item, idx) => (
+              <motion.div key={idx} variants={fadeInUp}>
+                <a
+                  href={item.href}
+                  target={idx !== 0 ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center text-center p-8 bg-white border border-slate-200 rounded-2xl hover:border-orange-300 hover:shadow-lg group transition-all duration-300"
+                >
+                  <div className="w-14 h-14 bg-orange-100 text-orange-500 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                    <item.icon className="w-6 h-6" />
+                  </div>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">{item.title}</p>
+                  <p className="font-black text-slate-900 text-base mb-1">{item.value}</p>
+                  <p className="text-slate-500 text-sm">{item.sub}</p>
+                </a>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-secondary text-white/60 py-12 border-t border-white/10">
+      {/* ── CTA Strip ── */}
+      <section className="py-16 bg-orange-500">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Let's build something great together.</h2>
+          <p className="text-orange-100 mb-8 text-base">Licensed, insured, and ready to transform your home.</p>
+          <a
+            href="tel:+18325777053"
+            className="inline-flex items-center gap-2 bg-white text-orange-600 hover:text-orange-700 font-black px-10 py-4 rounded-xl text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <Phone className="w-5 h-5" /> Call +1 832-577-7053
+          </a>
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="bg-[#0a1422] text-slate-400 py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-extrabold text-white mb-4">AK <span className="text-primary">Home Improvement</span></h3>
-              <p className="mb-6 max-w-md">Professional, reliable, and high-quality home improvement services in Sugar Land, Texas.</p>
-              <div className="flex gap-4">
-                <a href="https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
-                  <SiFacebook className="w-5 h-5" />
-                </a>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center">
+                  <Wrench className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-black text-white">
+                  AK <span className="text-orange-400">Home Improvement</span>
+                </span>
               </div>
+              <p className="text-sm leading-relaxed max-w-sm mb-5">
+                Professional, reliable, and high-quality home improvement services in Sugar Land, Texas. Rated 5.0 stars with 59 verified reviews.
+              </p>
+              <a
+                href="https://www.facebook.com/p/AkHomeImprovement-LLC-100066768828574/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-slate-800 hover:bg-orange-500 text-slate-300 hover:text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+              >
+                <SiFacebook className="w-4 h-4" /> Follow on Facebook
+              </a>
             </div>
-            
+
             <div>
-              <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="#services" className="hover:text-primary transition-colors">Services</a></li>
-                <li><a href="#reviews" className="hover:text-primary transition-colors">Reviews</a></li>
-                <li><a href="#about" className="hover:text-primary transition-colors">About Us</a></li>
+              <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-widest">Navigation</h4>
+              <ul className="space-y-2.5">
+                {navLinks.map((link) => (
+                  <li key={link.label}>
+                    <a href={link.href} className="text-sm hover:text-orange-400 transition-colors">{link.label}</a>
+                  </li>
+                ))}
               </ul>
             </div>
-            
+
             <div>
-              <h4 className="text-lg font-bold text-white mb-4">Contact</h4>
-              <ul className="space-y-2">
-                <li className="hover:text-white transition-colors"><a href="tel:+18325777053">+1 832-577-7053</a></li>
-                <li>Sugar Land, TX 77487</li>
-                <li>Mon–Sat: 7 AM – 8 PM</li>
+              <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-widest">Contact</h4>
+              <ul className="space-y-2.5 text-sm">
+                <li>
+                  <a href="tel:+18325777053" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-orange-400" /> +1 832-577-7053
+                  </a>
+                </li>
+                <li className="flex items-start gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-orange-400 mt-0.5 shrink-0" /> 225 Matlage Way #1772, Sugar Land, TX 77487
+                </li>
+                <li className="flex items-center gap-2">
+                  <Clock className="w-3.5 h-3.5 text-orange-400" /> Mon–Sat: 7 AM – 8 PM
+                </li>
               </ul>
             </div>
           </div>
-          
-          <div className="pt-8 border-t border-white/10 text-center text-sm">
+
+          <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-2 text-xs">
             <p>&copy; {new Date().getFullYear()} AK Home Improvement LLC. All rights reserved.</p>
+            <p>Sugar Land, Texas</p>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }
