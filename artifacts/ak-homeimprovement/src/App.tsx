@@ -111,11 +111,9 @@ function Navbar() {
       <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white border-b border-slate-200"}`}>
         <div className="container mx-auto px-4 flex justify-between items-center h-16">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2.5 shrink-0">
-            <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center shadow">
-              <Wrench className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-black tracking-tight text-slate-900">
+          <a href="#home" className="flex items-center gap-2 shrink-0">
+            <span className="text-3xl leading-none" role="img" aria-label="construction">🏗️</span>
+            <span className="text-base sm:text-xl font-black tracking-tight text-slate-900 leading-tight">
               AK <span className="text-orange-500">Home Improvement</span>
             </span>
           </a>
@@ -133,7 +131,7 @@ function Navbar() {
             ))}
           </div>
 
-          {/* CTA */}
+          {/* CTA - hidden on mobile */}
           <div className="hidden lg:flex items-center gap-3">
             <a
               href="tel:+18325777053"
@@ -143,10 +141,22 @@ function Navbar() {
             </a>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button className="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100" onClick={() => setMobileOpen(!mobileOpen)}>
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile: call icon + menu toggle */}
+          <div className="flex lg:hidden items-center gap-2">
+            <a
+              href="tel:+18325777053"
+              className="flex items-center gap-1.5 bg-orange-500 text-white font-bold px-3 py-2 rounded-lg text-xs"
+            >
+              <Phone className="w-3.5 h-3.5" /> Call
+            </a>
+            <button
+              className="p-2 rounded-lg text-slate-700 hover:bg-slate-100"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -183,11 +193,11 @@ function Home() {
   }, []);
 
   return (
-    <div id="home" className="flex flex-col min-h-screen font-sans bg-white text-slate-900 overflow-x-hidden">
+    <div id="home" className="flex flex-col min-h-screen font-sans bg-white text-slate-900">
       <Navbar />
 
       {/* ── Hero ── */}
-      <section className="relative h-[88vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[75vh] sm:h-[82vh] min-h-[500px] flex items-center overflow-hidden">
         {/* Slideshow background images */}
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
@@ -199,74 +209,54 @@ function Home() {
               style={{ opacity: idx === currentSlide ? 1 : 0 }}
             />
           ))}
-          {/* Gradient overlay — always on top of images */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/88 via-slate-900/65 to-slate-900/35 z-10" />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/30 z-10 pointer-events-none" />
         </div>
 
-        <div className="container relative z-20 mx-auto px-4 flex flex-col items-start text-left text-white max-w-3xl">
+        {/* Hero Content */}
+        <div className="container relative z-20 mx-auto px-5 sm:px-8 flex flex-col items-start text-left text-white pointer-events-auto w-full max-w-4xl">
+          {/* Stars badge */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/40 text-orange-300 px-4 py-1.5 rounded-full mb-6 text-sm font-semibold"
+            className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/40 text-orange-300 px-3 py-1.5 rounded-full mb-4 text-xs sm:text-sm font-semibold"
           >
             <div className="flex">
-              {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current text-orange-400" />)}
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current text-orange-400" />)}
             </div>
             5.0 Stars · 59 Google Reviews
           </motion.div>
 
+          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.05]"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-4 sm:mb-6 leading-[1.05]"
           >
             Sugar Land's<br />
             <span className="text-orange-400">Trusted Home</span><br />
             Improvement Pros
           </motion.h1>
 
+          {/* Sub-text */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-lg md:text-xl text-slate-200 mb-10 max-w-xl leading-relaxed"
+            className="text-sm sm:text-lg md:text-xl text-slate-200 max-w-xl leading-relaxed"
           >
             Painting, flooring, remodeling, drywall, epoxy floors, and more. We show up on time, do exceptional work, and leave your home spotless.
           </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <a
-              href="tel:+18325777053"
-              className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-xl text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
-            >
-              <Phone className="w-5 h-5" /> Get a Free Estimate
-            </a>
-            <a
-              href="#services"
-              className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 py-4 rounded-xl text-base hover:-translate-y-0.5 transition-all duration-200"
-            >
-              View Our Services <ChevronRight className="w-4 h-4" />
-            </a>
-          </motion.div>
         </div>
 
-        {/* Slide dots + label + arrows — pinned to bottom of hero */}
-        <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center gap-3">
-          {/* Current slide label */}
-          <p className="text-white/60 text-xs font-medium tracking-widest uppercase">
+        {/* Slide dots + label + arrows — pinned to bottom */}
+        <div className="absolute bottom-5 sm:bottom-8 left-0 right-0 z-20 flex flex-col items-center gap-2 sm:gap-3">
+          <p className="hidden sm:block text-white/60 text-xs font-medium tracking-widest uppercase">
             {heroSlides[currentSlide].label}
           </p>
-
-          {/* Dots row with prev/next arrows */}
-          <div className="flex items-center gap-4">
-            {/* Prev */}
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
               className="w-8 h-8 rounded-full bg-white/10 hover:bg-orange-500 border border-white/20 flex items-center justify-center text-white transition-all duration-200"
@@ -274,8 +264,6 @@ function Home() {
             >
               <ChevronRight className="w-4 h-4 rotate-180" />
             </button>
-
-            {/* Dots */}
             <div className="flex items-center gap-2">
               {heroSlides.map((_, idx) => (
                 <button
@@ -284,15 +272,13 @@ function Home() {
                   aria-label={`Go to slide ${idx + 1}`}
                   className="transition-all duration-300 rounded-full"
                   style={{
-                    width: idx === currentSlide ? "28px" : "8px",
-                    height: "8px",
+                    width: idx === currentSlide ? "24px" : "7px",
+                    height: "7px",
                     backgroundColor: idx === currentSlide ? "rgb(249 115 22)" : "rgba(255,255,255,0.45)"
                   }}
                 />
               ))}
             </div>
-
-            {/* Next */}
             <button
               onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
               className="w-8 h-8 rounded-full bg-white/10 hover:bg-orange-500 border border-white/20 flex items-center justify-center text-white transition-all duration-200"
@@ -301,9 +287,7 @@ function Home() {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-
-          {/* Progress bar */}
-          <div className="w-48 h-0.5 bg-white/20 rounded-full overflow-hidden">
+          <div className="w-32 sm:w-48 h-0.5 bg-white/20 rounded-full overflow-hidden">
             <div
               key={currentSlide}
               className="h-full bg-orange-500 rounded-full"
@@ -320,10 +304,28 @@ function Home() {
         }
       `}</style>
 
+      {/* ── Hero CTA Buttons ── */}
+      <div className="bg-[#0f1c2e] py-6 sm:py-8">
+        <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+          <a
+            href="tel:+18325777053"
+            className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <Phone className="w-5 h-5" /> Get a Free Estimate
+          </a>
+          <a
+            href="#services"
+            className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base hover:-translate-y-0.5 transition-all duration-200"
+          >
+            View Our Services <ChevronRight className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
       {/* ── Stats Bar ── */}
-      <section className="bg-[#0f1c2e] text-white py-10">
+      <section className="bg-[#0f1c2e] text-white py-8 sm:py-10 border-t border-white/5">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             {[
               { value: "5.0", label: "Google Star Rating", sub: "Perfect Score" },
               { value: "59+", label: "Verified Reviews", sub: "All 5 Stars" },
@@ -331,8 +333,8 @@ function Home() {
               { value: "100%", label: "Client Satisfaction", sub: "Guaranteed" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center py-2">
-                <span className="text-4xl font-black text-orange-400 mb-1">{stat.value}</span>
-                <span className="font-semibold text-white text-sm">{stat.label}</span>
+                <span className="text-3xl sm:text-4xl font-black text-orange-400 mb-1">{stat.value}</span>
+                <span className="font-semibold text-white text-xs sm:text-sm">{stat.label}</span>
                 <span className="text-slate-400 text-xs mt-0.5">{stat.sub}</span>
               </div>
             ))}
@@ -341,26 +343,26 @@ function Home() {
       </section>
 
       {/* ── Services ── */}
-      <section id="services" className="py-24 bg-slate-50">
+      <section id="services" className="py-16 sm:py-24 bg-slate-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="text-center mb-14"
+            className="text-center mb-10 sm:mb-14"
           >
             <span className="inline-block text-orange-500 font-bold text-sm uppercase tracking-widest mb-3">What We Do</span>
-            <h2 className="text-4xl font-black text-slate-900 mb-4">Our Services</h2>
-            <p className="text-slate-500 max-w-xl mx-auto text-base leading-relaxed">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Our Services</h2>
+            <p className="text-slate-500 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
               From minor repairs to complete remodels — skilled craftsmanship for every corner of your home.
             </p>
           </motion.div>
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
           >
             {services.map((service, idx) => (
               <motion.div key={idx} variants={fadeInUp} className="group cursor-default">
-                <div className="relative h-64 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 bg-slate-800">
+                <div className="relative h-56 sm:h-64 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 bg-slate-800">
                   <img
                     src={service.image}
                     alt={service.title}
@@ -369,11 +371,11 @@ function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/10 group-hover:from-slate-900/85 group-hover:via-slate-900/35 transition-all duration-500" />
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-5">
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5">
                     <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center mb-3 shadow group-hover:scale-110 transition-transform duration-300">
                       <service.icon className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-1">{service.title}</h3>
+                    <h3 className="text-base sm:text-lg font-bold text-white mb-1">{service.title}</h3>
                     <p className="text-slate-300 text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-500">{service.desc}</p>
                   </div>
                 </div>
@@ -383,14 +385,14 @@ function Home() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="mt-12 text-center"
+            className="mt-10 sm:mt-12 text-center"
           >
-            <p className="text-slate-500 mb-6 text-sm">
+            <p className="text-slate-500 mb-5 sm:mb-6 text-sm px-4">
               Also available: Blind Installation · Scaffolding Rental · Game Room Finishing · Storm Damage Repair
             </p>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 border-2 border-slate-800 text-slate-800 hover:bg-slate-800 hover:text-white font-bold px-7 py-3 rounded-xl transition-all duration-200"
+              className="inline-flex items-center gap-2 border-2 border-slate-800 text-slate-800 hover:bg-slate-800 hover:text-white font-bold px-6 sm:px-7 py-3 rounded-xl transition-all duration-200 text-sm sm:text-base"
             >
               Discuss Your Project <ChevronRight className="w-4 h-4" />
             </a>
@@ -399,26 +401,26 @@ function Home() {
       </section>
 
       {/* ── Reviews ── */}
-      <section id="reviews" className="py-24 bg-white">
+      <section id="reviews" className="py-16 sm:py-24 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="text-center mb-14"
+            className="text-center mb-10 sm:mb-14"
           >
             <span className="inline-block text-orange-500 font-bold text-sm uppercase tracking-widest mb-3">Testimonials</span>
-            <h2 className="text-4xl font-black text-slate-900 mb-4">What Our Clients Say</h2>
-            <p className="text-slate-500 max-w-xl mx-auto text-base">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">What Our Clients Say</h2>
+            <p className="text-slate-500 max-w-xl mx-auto text-sm sm:text-base">
               We've built our reputation on hard work and exceptional results. See what your neighbors have to say.
             </p>
           </motion.div>
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
           >
             {reviews.map((review, idx) => (
               <motion.div key={idx} variants={fadeInUp} className="h-full">
-                <div className="h-full bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-orange-200 transition-all duration-300 flex flex-col">
+                <div className="h-full bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6 hover:shadow-lg hover:border-orange-200 transition-all duration-300 flex flex-col">
                   <div className="flex text-orange-400 mb-4">
                     {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                   </div>
@@ -440,28 +442,28 @@ function Home() {
       </section>
 
       {/* ── About / Why Us ── */}
-      <section id="about" className="py-24 bg-[#0f1c2e] text-white">
+      <section id="about" className="py-16 sm:py-24 bg-[#0f1c2e] text-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 items-center">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
               <span className="inline-block text-orange-400 font-bold text-sm uppercase tracking-widest mb-3">Why Choose Us</span>
-              <h2 className="text-4xl font-black mb-6 leading-tight">The AK Home Improvement Difference</h2>
-              <p className="text-slate-300 text-base leading-relaxed mb-10">
+              <h2 className="text-3xl sm:text-4xl font-black mb-5 sm:mb-6 leading-tight">The AK Home Improvement Difference</h2>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 sm:mb-10">
                 When you hire us, you get a dedicated team that treats your home with the utmost respect. No cut corners, no hidden fees — just outstanding craftsmanship backed by 59 five-star reviews.
               </p>
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 {[
                   { title: "Punctual & Professional", desc: "We show up when we say we will, and clean up when we're done." },
                   { title: "Transparent Pricing", desc: "Fair quotes, clear estimates, and absolutely no surprise charges." },
                   { title: "Exceptional Attention to Detail", desc: "From baseboards to full remodels, quality is never compromised." },
                   { title: "Same-Day Availability", desc: "Flexible scheduling — we work around your timeline." }
                 ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4 items-start">
+                  <div key={idx} className="flex gap-3 sm:gap-4 items-start">
                     <div className="w-8 h-8 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 flex items-center justify-center shrink-0 mt-0.5">
                       <CheckCircle2 className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white mb-0.5">{item.title}</h4>
+                      <h4 className="font-bold text-white mb-0.5 text-sm sm:text-base">{item.title}</h4>
                       <p className="text-slate-400 text-sm">{item.desc}</p>
                     </div>
                   </div>
@@ -471,19 +473,19 @@ function Home() {
 
             <motion.div
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-              className="relative"
+              className="relative mt-6 lg:mt-0"
             >
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-orange-500 rounded-2xl flex items-center justify-center shadow-xl rotate-6 z-10">
+              <div className="absolute -top-4 -right-2 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 bg-orange-500 rounded-2xl flex items-center justify-center shadow-xl rotate-6 z-10">
                 <div className="text-white text-center leading-tight">
-                  <div className="text-2xl font-black">5.0</div>
+                  <div className="text-xl sm:text-2xl font-black">5.0</div>
                   <div className="text-xs font-semibold">Stars</div>
                 </div>
               </div>
-              <div className="bg-white text-slate-900 p-8 md:p-10 rounded-2xl shadow-2xl">
-                <h3 className="text-2xl font-black mb-2 text-slate-900">Ready to upgrade your home?</h3>
-                <p className="text-slate-500 text-sm mb-8">Contact us today for a free consultation. Same-day appointments may be available!</p>
+              <div className="bg-white text-slate-900 p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl">
+                <h3 className="text-xl sm:text-2xl font-black mb-2 text-slate-900">Ready to upgrade your home?</h3>
+                <p className="text-slate-500 text-sm mb-6 sm:mb-8">Contact us today for a free consultation. Same-day appointments may be available!</p>
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                   <a href="tel:+18325777053" className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-200 transition-all group">
                     <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-all">
                       <Phone className="w-4 h-4" />
@@ -526,29 +528,29 @@ function Home() {
       </section>
 
       {/* ── Contact ── */}
-      <section id="contact" className="py-24 bg-slate-50">
+      <section id="contact" className="py-16 sm:py-24 bg-slate-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-            className="text-center mb-14"
+            className="text-center mb-10 sm:mb-14"
           >
             <span className="inline-block text-orange-500 font-bold text-sm uppercase tracking-widest mb-3">Get In Touch</span>
-            <h2 className="text-4xl font-black text-slate-900 mb-4">Contact Us</h2>
-            <p className="text-slate-500 max-w-lg mx-auto text-base">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Contact Us</h2>
+            <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-base">
               Have a project in mind? Call us or reach out via Facebook — we respond fast and same-day quotes are often available.
             </p>
           </motion.div>
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 max-w-5xl mx-auto"
           >
             {[
               {
                 icon: Phone,
                 title: "Call or Text",
                 value: "+1 832-577-7053",
-                sub: "Available Mon–Sat, 7 AM – 8 PM",
+                sub: "Mon–Sat, 7 AM – 8 PM",
                 href: "tel:+18325777053"
               },
               {
@@ -561,7 +563,7 @@ function Home() {
               {
                 icon: MapPin,
                 title: "Our Location",
-                value: "Sugar Land, TX 77487",
+                value: "Sugar Land, TX",
                 sub: "225 Matlage Way #1772",
                 href: "https://maps.google.com/?q=225+Matlage+Way+%231772+Sugar+Land+TX+77487"
               },
@@ -578,14 +580,14 @@ function Home() {
                   href={item.href}
                   target={idx !== 0 ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center text-center p-8 bg-white border border-slate-200 rounded-2xl hover:border-orange-300 hover:shadow-lg group transition-all duration-300"
+                  className="flex flex-col items-center text-center p-4 sm:p-8 bg-white border border-slate-200 rounded-2xl hover:border-orange-300 hover:shadow-lg group transition-all duration-300 h-full"
                 >
-                  <div className="w-14 h-14 bg-orange-100 text-orange-500 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
-                    <item.icon className="w-6 h-6" />
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 bg-orange-100 text-orange-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-5 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                    <item.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">{item.title}</p>
-                  <p className="font-black text-slate-900 text-base mb-1">{item.value}</p>
-                  <p className="text-slate-500 text-sm">{item.sub}</p>
+                  <p className="font-black text-slate-900 text-sm sm:text-base mb-1">{item.value}</p>
+                  <p className="text-slate-500 text-xs sm:text-sm">{item.sub}</p>
                 </a>
               </motion.div>
             ))}
@@ -594,13 +596,13 @@ function Home() {
       </section>
 
       {/* ── CTA Strip ── */}
-      <section className="py-16 bg-orange-500">
+      <section className="py-12 sm:py-16 bg-orange-500">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Let's build something great together.</h2>
-          <p className="text-orange-100 mb-8 text-base">Licensed, insured, and ready to transform your home.</p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3">Let's build something great together.</h2>
+          <p className="text-orange-100 mb-6 sm:mb-8 text-sm sm:text-base">Licensed, insured, and ready to transform your home.</p>
           <a
             href="tel:+18325777053"
-            className="inline-flex items-center gap-2 bg-white text-orange-600 hover:text-orange-700 font-black px-10 py-4 rounded-xl text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-white text-orange-600 hover:text-orange-700 font-black px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl hover:-translate-y-0.5 transition-all duration-200"
           >
             <Phone className="w-5 h-5" /> Call +1 832-577-7053
           </a>
@@ -608,14 +610,12 @@ function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#0a1422] text-slate-400 py-12">
+      <footer className="bg-[#0a1422] text-slate-400 py-10 sm:py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-8 sm:mb-10">
+            <div className="sm:col-span-2">
               <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <Wrench className="w-5 h-5 text-white" />
-                </div>
+                <span className="text-3xl leading-none" role="img" aria-label="construction">🏗️</span>
                 <span className="text-xl font-black text-white">
                   AK <span className="text-orange-400">Home Improvement</span>
                 </span>
@@ -649,25 +649,25 @@ function Home() {
               <ul className="space-y-2.5 text-sm">
                 <li>
                   <a href="tel:+18325777053" className="hover:text-orange-400 transition-colors flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-orange-400" /> +1 832-577-7053
+                    <Phone className="w-3.5 h-3.5 text-orange-400 shrink-0" /> +1 832-577-7053
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:armanhomeimprovement@gmail.com" className="hover:text-orange-400 transition-colors flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-orange-400" /> armanhomeimprovement@gmail.com
+                  <a href="mailto:armanhomeimprovement@gmail.com" className="hover:text-orange-400 transition-colors flex items-start gap-2 break-all">
+                    <Mail className="w-3.5 h-3.5 text-orange-400 shrink-0 mt-0.5" /> armanhomeimprovement@gmail.com
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
                   <MapPin className="w-3.5 h-3.5 text-orange-400 mt-0.5 shrink-0" /> 225 Matlage Way #1772, Sugar Land, TX 77487
                 </li>
                 <li className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-orange-400" /> Mon–Sat: 7 AM – 8 PM
+                  <Clock className="w-3.5 h-3.5 text-orange-400 shrink-0" /> Mon–Sat: 7 AM – 8 PM
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-2 text-xs">
+          <div className="pt-6 sm:pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-center">
             <p>&copy; {new Date().getFullYear()} AK Home Improvement LLC. All rights reserved.</p>
             <p>Sugar Land, Texas</p>
           </div>
