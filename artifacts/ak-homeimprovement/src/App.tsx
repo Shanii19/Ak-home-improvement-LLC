@@ -16,8 +16,8 @@ const heroSlides = [
     label: "Modern Home Renovations"
   },
   {
-    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=85",
-    label: "Professional Painting"
+    image: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1600&q=85",
+    label: "Painting · Flooring · Remodeling · Epoxy · Drywall"
   },
   {
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=85",
