@@ -10,6 +10,25 @@ import { SiFacebook } from "react-icons/si";
 
 const queryClient = new QueryClient();
 
+const heroSlides = [
+  {
+    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600&q=85",
+    label: "Modern Home Renovations"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=85",
+    label: "Professional Painting"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=85",
+    label: "Beautiful Interiors"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=1600&q=85",
+    label: "Quality Flooring"
+  }
+];
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" } }
@@ -178,19 +197,34 @@ function Navbar() {
 }
 
 function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div id="home" className="flex flex-col min-h-screen font-sans bg-white text-slate-900 overflow-x-hidden">
       <Navbar />
 
       {/* ── Hero ── */}
       <section className="relative h-[88vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        {/* Slideshow background images */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/40 z-10" />
-          <img
-            src="/hero-bg.jpg"
-            alt="Professional Home Renovation"
-            className="w-full h-full object-cover object-center"
-          />
+          {heroSlides.map((slide, idx) => (
+            <img
+              key={idx}
+              src={slide.image}
+              alt={slide.label}
+              className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000"
+              style={{ opacity: idx === currentSlide ? 1 : 0 }}
+            />
+          ))}
+          {/* Gradient overlay — always on top of images */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/88 via-slate-900/65 to-slate-900/35 z-10" />
         </div>
 
         <div className="container relative z-20 mx-auto px-4 flex flex-col items-start text-left text-white max-w-3xl">
@@ -246,7 +280,69 @@ function Home() {
             </a>
           </motion.div>
         </div>
+
+        {/* Slide dots + label + arrows — pinned to bottom of hero */}
+        <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center gap-3">
+          {/* Current slide label */}
+          <p className="text-white/60 text-xs font-medium tracking-widest uppercase">
+            {heroSlides[currentSlide].label}
+          </p>
+
+          {/* Dots row with prev/next arrows */}
+          <div className="flex items-center gap-4">
+            {/* Prev */}
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-orange-500 border border-white/20 flex items-center justify-center text-white transition-all duration-200"
+              aria-label="Previous slide"
+            >
+              <ChevronRight className="w-4 h-4 rotate-180" />
+            </button>
+
+            {/* Dots */}
+            <div className="flex items-center gap-2">
+              {heroSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className="transition-all duration-300 rounded-full"
+                  style={{
+                    width: idx === currentSlide ? "28px" : "8px",
+                    height: "8px",
+                    backgroundColor: idx === currentSlide ? "rgb(249 115 22)" : "rgba(255,255,255,0.45)"
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Next */}
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-orange-500 border border-white/20 flex items-center justify-center text-white transition-all duration-200"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Progress bar */}
+          <div className="w-48 h-0.5 bg-white/20 rounded-full overflow-hidden">
+            <div
+              key={currentSlide}
+              className="h-full bg-orange-500 rounded-full"
+              style={{ animation: "heroProgress 5s linear forwards" }}
+            />
+          </div>
+        </div>
       </section>
+
+      <style>{`
+        @keyframes heroProgress {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
 
       {/* ── Stats Bar ── */}
       <section className="bg-[#0f1c2e] text-white py-10">
