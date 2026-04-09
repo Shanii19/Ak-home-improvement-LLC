@@ -1,56 +1,33 @@
-# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Build output
+dist/
+dist-ssr/
+*.local
 
-# compiled output
-dist
-tmp
-out-tsc
-*.tsbuildinfo
-.expo
-.expo-shared
+# Dependencies
+node_modules/
 
-# dependencies
-node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# System Files
+# Sensitive config
+src/config.ts
+
+# OS Files
 .DS_Store
 Thumbs.db
-
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
-
-# Replit
-.cache/
-.local/
-
-# Sensitive config — use environment variables instead
-# For local dev: copy .env.example → .env.local and fill in real values
-# For Vercel: set VITE_* vars in Vercel Dashboard → Settings → Environment Variables
-artifacts/ak-homeimprovement/src/config.ts
-artifacts/ak-homeimprovement/.env.local
-artifacts/ak-homeimprovement/.env
