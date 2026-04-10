@@ -16,7 +16,8 @@ const config = {
     phone:        import.meta.env.VITE_CONTACT_PHONE         ?? "+1 832-577-7053",
     phoneHref:    import.meta.env.VITE_CONTACT_PHONE_HREF    ?? "tel:+18325777053",
     email:        import.meta.env.VITE_CONTACT_EMAIL         ?? "armanhomeimprovement@gmail.com",
-    emailHref:    import.meta.env.VITE_CONTACT_EMAIL_HREF    ?? "mailto:armanhomeimprovement@gmail.com",
+    // Gmail direct compose link for better user experience
+    emailHref:    import.meta.env.VITE_CONTACT_EMAIL_HREF    ?? "https://mail.google.com/mail/?view=cm&fs=1&to=armanhomeimprovement@gmail.com",
     address:      import.meta.env.VITE_CONTACT_ADDRESS       ?? "225 Matlage Way #1772, Sugar Land, TX 77487",
     addressShort: import.meta.env.VITE_CONTACT_ADDRESS_SHORT ?? "225 Matlage Way #1772, Sugar Land, TX",
     mapsHref:     import.meta.env.VITE_CONTACT_MAPS_HREF     ?? "https://maps.google.com/?q=225+Matlage+Way+%231772+Sugar+Land+TX+77487",

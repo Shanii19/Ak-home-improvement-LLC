@@ -573,7 +573,7 @@ function Home() {
               <motion.div key={idx} variants={fadeInUp}>
                 <a
                   href={item.href}
-                  target={idx !== 0 ? "_blank" : undefined}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   className="flex flex-col items-center text-center p-4 sm:p-8 bg-white border border-slate-200 rounded-2xl hover:border-orange-300 hover:shadow-lg group transition-all duration-300 h-full"
                 >
