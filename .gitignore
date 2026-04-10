@@ -25,9 +25,6 @@ pnpm-debug.log*
 .env.test.local
 .env.production.local
 
-# Sensitive config
-src/config.ts
-
 # OS Files
 .DS_Store
 Thumbs.db
